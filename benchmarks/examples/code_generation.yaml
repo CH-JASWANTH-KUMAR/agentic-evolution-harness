@@ -1,0 +1,33 @@
+version: "1.0"
+name: "structured-json-agent-benchmark"
+description: "Evaluates an agent's capability to output valid, structured JSON schemas."
+
+agent:
+  adapter: mock
+  config:
+    default_output: '{"status": "success", "result": 42, "metadata": {"model": "mock"}}'
+
+evaluators:
+  - name: json_match
+
+metrics:
+  - success_rate
+  - accuracy
+  - latency
+
+thresholds:
+  success_rate:
+    minimum: 1.0
+
+tests:
+  - id: "json-001"
+    name: "status_success"
+    input: "Generate success status payload"
+    expected:
+      status: "success"
+      result: 42
+    evaluators:
+      - name: json_match
+        options:
+          subset: true
+    tags: ["json", "structured"]

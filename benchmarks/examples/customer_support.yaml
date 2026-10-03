@@ -1,0 +1,76 @@
+version: "1.0"
+name: "customer-support-agent-benchmark"
+description: "Realistic multi-scenario benchmark evaluating customer support agents across billing, tracking, and policy questions."
+
+agent:
+  adapter: generic
+  module: "examples.basic.mock_agent:support_agent"
+
+evaluators:
+  - name: contains
+
+metrics:
+  - success_rate
+  - accuracy
+  - latency
+  - cost
+  - reliability
+
+thresholds:
+  success_rate:
+    minimum: 0.80
+  latency:
+    maximum: 2.0
+
+tests:
+  - id: "support-001"
+    name: "refund_request_damaged_item"
+    input: "My item was crushed during shipping. Please refund my order."
+    expected: "Refund of $49.99 processed"
+    evaluators:
+      - name: contains
+        options:
+          substring: "Refund of $49.99 processed"
+      - name: tool_usage
+        options:
+          expected_tools:
+            - lookup_order
+            - process_refund
+          ordered: true
+    tags: ["billing", "refunds"]
+
+  - id: "support-002"
+    name: "track_package_in_transit"
+    input: "Where is my shipment right now?"
+    expected: "in transit"
+    evaluators:
+      - name: contains
+        options:
+          substring: "in transit"
+      - name: tool_usage
+        options:
+          expected_tools:
+            - track_shipment
+    tags: ["logistics", "tracking"]
+
+  - id: "support-003"
+    name: "weather_query"
+    input: "What's the weather in San Francisco today?"
+    expected: "65°F and sunny"
+    evaluators:
+      - name: contains
+        options:
+          substring: "65°F and sunny"
+      - name: tool_usage
+        options:
+          expected_tools:
+            - get_weather
+    tags: ["general", "tools"]
+
+  - id: "support-004"
+    name: "polite_greeting"
+    input: "Hello there, good morning!"
+    expected: "Hello! How can I assist you with your order today?"
+    evaluators:
+      - name: exact_match
+    tags: ["conversational"]

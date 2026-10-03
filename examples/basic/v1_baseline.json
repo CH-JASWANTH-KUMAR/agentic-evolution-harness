@@ -1,0 +1,519 @@
+{
+  "id": "c14aae1f",
+  "name": "basic-support-benchmark",
+  "timestamp": "2026-10-03T17:31:09.794462Z",
+  "agent_info": {
+    "adapter": "custom"
+  },
+  "benchmark_info": {
+    "file": "examples/basic/benchmark.yaml",
+    "description": "Demonstration benchmark evaluating customer support response accuracy and tool calls."
+  },
+  "results": [
+    {
+      "test_case": {
+        "id": "refund-01",
+        "name": "refund_request",
+        "description": "Verify agent processes refund and calls order and refund tools.",
+        "input": "I received broken merchandise and would like a refund.",
+        "expected": "Refund of $49.99 processed for order ORD-123.",
+        "evaluators": [
+          {
+            "name": "contains",
+            "options": {
+              "substring": "Refund of $49.99 processed"
+            },
+            "weight": 1.0
+          },
+          {
+            "name": "tool_usage",
+            "options": {
+              "expected_tools": [
+                "lookup_order",
+                "process_refund"
+              ],
+              "ordered": true
+            },
+            "weight": 1.0
+          }
+        ],
+        "tags": [
+          "billing",
+          "refunds"
+        ],
+        "metadata": {}
+      },
+      "output": {
+        "output": "Refund of $49.99 processed for order ORD-123.",
+        "latency": 0.32,
+        "token_usage": {
+          "prompt_tokens": 45,
+          "completion_tokens": 15,
+          "total_tokens": 60
+        },
+        "cost": 0.0003,
+        "tool_calls": [
+          {
+            "tool_name": "lookup_order",
+            "args": {
+              "order_id": "ORD-123"
+            },
+            "output": null,
+            "duration": null,
+            "status": "success",
+            "error": null
+          },
+          {
+            "tool_name": "process_refund",
+            "args": {
+              "amount": 49.99,
+              "currency": "USD"
+            },
+            "output": null,
+            "duration": null,
+            "status": "success",
+            "error": null
+          }
+        ],
+        "trace": {
+          "tool_calls": [
+            {
+              "tool_name": "lookup_order",
+              "args": {
+                "order_id": "ORD-123"
+              },
+              "output": null,
+              "duration": null,
+              "status": "success",
+              "error": null
+            },
+            {
+              "tool_name": "process_refund",
+              "args": {
+                "amount": 49.99,
+                "currency": "USD"
+              },
+              "output": null,
+              "duration": null,
+              "status": "success",
+              "error": null
+            }
+          ],
+          "steps": [],
+          "events": [],
+          "metadata": {}
+        },
+        "metadata": {},
+        "error": null
+      },
+      "evaluations": [
+        {
+          "evaluator": "contains",
+          "score": 1.0,
+          "passed": true,
+          "explanation": "Output contains 'Refund of $49.99 processed'.",
+          "details": {
+            "target": "Refund of $49.99 processed",
+            "is_regex": false,
+            "case_sensitive": true
+          },
+          "metadata": {}
+        },
+        {
+          "evaluator": "tool_usage",
+          "score": 1.0,
+          "passed": true,
+          "explanation": "Tool invocation criteria satisfied (2 tool calls observed).",
+          "details": {
+            "actual_tools": [
+              "lookup_order",
+              "process_refund"
+            ],
+            "expected_tools": [
+              "lookup_order",
+              "process_refund"
+            ]
+          },
+          "metadata": {}
+        }
+      ],
+      "passed": true,
+      "duration": 0.000046927001676522195,
+      "metadata": {}
+    },
+    {
+      "test_case": {
+        "id": "order-02",
+        "name": "order_status",
+        "description": "Verify tracking info and tracking tool invocation.",
+        "input": "Can you check tracking for my order?",
+        "expected": "in transit",
+        "evaluators": [
+          {
+            "name": "contains",
+            "options": {
+              "substring": "in transit"
+            },
+            "weight": 1.0
+          },
+          {
+            "name": "tool_usage",
+            "options": {
+              "expected_tools": [
+                "track_shipment"
+              ]
+            },
+            "weight": 1.0
+          }
+        ],
+        "tags": [
+          "tracking",
+          "logistics"
+        ],
+        "metadata": {}
+      },
+      "output": {
+        "output": "Your package is currently in transit and scheduled for delivery tomorrow.",
+        "latency": 0.18,
+        "token_usage": {
+          "prompt_tokens": 30,
+          "completion_tokens": 20,
+          "total_tokens": 50
+        },
+        "cost": 0.0002,
+        "tool_calls": [
+          {
+            "tool_name": "track_shipment",
+            "args": {
+              "tracking_number": "TRK-990"
+            },
+            "output": null,
+            "duration": null,
+            "status": "success",
+            "error": null
+          }
+        ],
+        "trace": {
+          "tool_calls": [
+            {
+              "tool_name": "track_shipment",
+              "args": {
+                "tracking_number": "TRK-990"
+              },
+              "output": null,
+              "duration": null,
+              "status": "success",
+              "error": null
+            }
+          ],
+          "steps": [],
+          "events": [],
+          "metadata": {}
+        },
+        "metadata": {},
+        "error": null
+      },
+      "evaluations": [
+        {
+          "evaluator": "contains",
+          "score": 1.0,
+          "passed": true,
+          "explanation": "Output contains 'in transit'.",
+          "details": {
+            "target": "in transit",
+            "is_regex": false,
+            "case_sensitive": true
+          },
+          "metadata": {}
+        },
+        {
+          "evaluator": "tool_usage",
+          "score": 1.0,
+          "passed": true,
+          "explanation": "Tool invocation criteria satisfied (1 tool calls observed).",
+          "details": {
+            "actual_tools": [
+              "track_shipment"
+            ],
+            "expected_tools": [
+              "track_shipment"
+            ]
+          },
+          "metadata": {}
+        }
+      ],
+      "passed": true,
+      "duration": 0.000014078003005124629,
+      "metadata": {}
+    },
+    {
+      "test_case": {
+        "id": "weather-03",
+        "name": "weather_lookup",
+        "description": "Verify weather response and tool usage.",
+        "input": "What's the weather in San Francisco?",
+        "expected": "65°F and sunny",
+        "evaluators": [
+          {
+            "name": "contains",
+            "options": {
+              "substring": "65°F and sunny"
+            },
+            "weight": 1.0
+          },
+          {
+            "name": "tool_usage",
+            "options": {
+              "expected_tools": [
+                "get_weather"
+              ]
+            },
+            "weight": 1.0
+          }
+        ],
+        "tags": [
+          "general"
+        ],
+        "metadata": {}
+      },
+      "output": {
+        "output": "The weather in San Francisco is 65°F and sunny.",
+        "latency": 0.25,
+        "token_usage": {
+          "prompt_tokens": 25,
+          "completion_tokens": 12,
+          "total_tokens": 37
+        },
+        "cost": 0.0001,
+        "tool_calls": [
+          {
+            "tool_name": "get_weather",
+            "args": {
+              "location": "San Francisco"
+            },
+            "output": null,
+            "duration": null,
+            "status": "success",
+            "error": null
+          }
+        ],
+        "trace": {
+          "tool_calls": [
+            {
+              "tool_name": "get_weather",
+              "args": {
+                "location": "San Francisco"
+              },
+              "output": null,
+              "duration": null,
+              "status": "success",
+              "error": null
+            }
+          ],
+          "steps": [],
+          "events": [],
+          "metadata": {}
+        },
+        "metadata": {},
+        "error": null
+      },
+      "evaluations": [
+        {
+          "evaluator": "contains",
+          "score": 1.0,
+          "passed": true,
+          "explanation": "Output contains '65°F and sunny'.",
+          "details": {
+            "target": "65°F and sunny",
+            "is_regex": false,
+            "case_sensitive": true
+          },
+          "metadata": {}
+        },
+        {
+          "evaluator": "tool_usage",
+          "score": 1.0,
+          "passed": true,
+          "explanation": "Tool invocation criteria satisfied (1 tool calls observed).",
+          "details": {
+            "actual_tools": [
+              "get_weather"
+            ],
+            "expected_tools": [
+              "get_weather"
+            ]
+          },
+          "metadata": {}
+        }
+      ],
+      "passed": true,
+      "duration": 9.352999768452719e-6,
+      "metadata": {}
+    },
+    {
+      "test_case": {
+        "id": "greeting-04",
+        "name": "greeting",
+        "description": "Verify standard polite welcome greeting.",
+        "input": "Hello there!",
+        "expected": "Hello! How can I assist you with your order today?",
+        "evaluators": [
+          {
+            "name": "exact_match",
+            "options": {},
+            "weight": 1.0
+          }
+        ],
+        "tags": [
+          "conversational"
+        ],
+        "metadata": {}
+      },
+      "output": {
+        "output": "Hello! How can I assist you with your order today?",
+        "latency": 0.09,
+        "token_usage": {
+          "prompt_tokens": 10,
+          "completion_tokens": 15,
+          "total_tokens": 25
+        },
+        "cost": 0.00005,
+        "tool_calls": [],
+        "trace": null,
+        "metadata": {},
+        "error": null
+      },
+      "evaluations": [
+        {
+          "evaluator": "exact_match",
+          "score": 1.0,
+          "passed": true,
+          "explanation": "Output matches expected output exactly.",
+          "details": {
+            "actual": "Hello! How can I assist you with your order today?",
+            "expected": "Hello! How can I assist you with your order today?",
+            "ignore_case": false,
+            "strip_whitespace": true
+          },
+          "metadata": {}
+        }
+      ],
+      "passed": true,
+      "duration": 5.2199975471012294e-6,
+      "metadata": {}
+    },
+    {
+      "test_case": {
+        "id": "unknown-05",
+        "name": "unknown_request",
+        "description": "Intentional edge-case to demonstrate failed test reporting.",
+        "input": "Fly me to the moon on a rocket.",
+        "expected": "Rocket launched successfully.",
+        "evaluators": [
+          {
+            "name": "exact_match",
+            "options": {},
+            "weight": 1.0
+          }
+        ],
+        "tags": [
+          "edge-case"
+        ],
+        "metadata": {}
+      },
+      "output": {
+        "output": "I'm sorry, I didn't understand your request.",
+        "latency": 0.12,
+        "token_usage": {
+          "prompt_tokens": 12,
+          "completion_tokens": 10,
+          "total_tokens": 22
+        },
+        "cost": 0.00004,
+        "tool_calls": [],
+        "trace": null,
+        "metadata": {},
+        "error": null
+      },
+      "evaluations": [
+        {
+          "evaluator": "exact_match",
+          "score": 0.0,
+          "passed": false,
+          "explanation": "Expected 'Rocket launched successfully.', but received 'I'm sorry, I didn't understand your request.'.",
+          "details": {
+            "actual": "I'm sorry, I didn't understand your request.",
+            "expected": "Rocket launched successfully.",
+            "ignore_case": false,
+            "strip_whitespace": true
+          },
+          "metadata": {}
+        }
+      ],
+      "passed": false,
+      "duration": 4.49299841420725e-6,
+      "metadata": {}
+    }
+  ],
+  "metrics": {
+    "success_rate": {
+      "name": "success_rate",
+      "value": 0.8,
+      "formatted_value": "80.0%",
+      "direction": "higher_is_better",
+      "description": "Percentage of passed test cases",
+      "details": {
+        "total": 5,
+        "passed": 4,
+        "failed": 1
+      }
+    },
+    "accuracy": {
+      "name": "accuracy",
+      "value": 0.8,
+      "formatted_value": "0.80",
+      "direction": "higher_is_better",
+      "description": "Average normalized score across all test cases",
+      "details": {
+        "sample_size": 5
+      }
+    },
+    "latency": {
+      "name": "latency",
+      "value": 0.192,
+      "formatted_value": "0.19s",
+      "direction": "lower_is_better",
+      "description": "Average execution latency in seconds",
+      "details": {
+        "min": 0.09,
+        "max": 0.32,
+        "avg": 0.192
+      }
+    },
+    "cost": {
+      "name": "cost",
+      "value": 0.00069,
+      "formatted_value": "$0.0007",
+      "direction": "lower_is_better",
+      "description": "Total monetary cost in USD",
+      "details": {
+        "total_cost": 0.00069,
+        "average_cost": 0.000138,
+        "reported_runs": 5
+      }
+    },
+    "reliability": {
+      "name": "reliability",
+      "value": 1.0,
+      "formatted_value": "100.0%",
+      "direction": "higher_is_better",
+      "description": "Percentage of error-free executions",
+      "details": {
+        "total": 5,
+        "error_free": 5,
+        "errors": 0
+      }
+    }
+  },
+  "metadata": {}
+}

@@ -1,0 +1,96 @@
+version: "1.0"
+name: "basic-support-benchmark"
+description: "Demonstration benchmark evaluating customer support response accuracy and tool calls."
+
+agent:
+  adapter: generic
+  module: "examples.basic.mock_agent:support_agent"
+
+evaluators:
+  - name: exact_match
+
+metrics:
+  - success_rate
+  - accuracy
+  - latency
+  - cost
+  - reliability
+
+thresholds:
+  success_rate:
+    minimum: 0.70
+  latency:
+    maximum: 1.5
+
+tests:
+  - id: refund-01
+    name: "refund_request"
+    description: "Verify agent processes refund and calls order and refund tools."
+    input: "I received broken merchandise and would like a refund."
+    expected: "Refund of $49.99 processed for order ORD-123."
+    evaluators:
+      - name: contains
+        options:
+          substring: "Refund of $49.99 processed"
+      - name: tool_usage
+        options:
+          expected_tools:
+            - lookup_order
+            - process_refund
+          ordered: true
+    tags:
+      - billing
+      - refunds
+
+  - id: order-02
+    name: "order_status"
+    description: "Verify tracking info and tracking tool invocation."
+    input: "Can you check tracking for my order?"
+    expected: "in transit"
+    evaluators:
+      - name: contains
+        options:
+          substring: "in transit"
+      - name: tool_usage
+        options:
+          expected_tools:
+            - track_shipment
+    tags:
+      - tracking
+      - logistics
+
+  - id: weather-03
+    name: "weather_lookup"
+    description: "Verify weather response and tool usage."
+    input: "What's the weather in San Francisco?"
+    expected: "65°F and sunny"
+    evaluators:
+      - name: contains
+        options:
+          substring: "65°F and sunny"
+      - name: tool_usage
+        options:
+          expected_tools:
+            - get_weather
+    tags:
+      - general
+
+  - id: greeting-04
+    name: "greeting"
+    description: "Verify standard polite welcome greeting."
+    input: "Hello there!"
+    expected: "Hello! How can I assist you with your order today?"
+    evaluators:
+      - name: exact_match
+    tags:
+      - conversational
+
+  - id: unknown-05
+    name: "unknown_request"
+    description: "Intentional edge-case to demonstrate failed test reporting."
+    input: "Fly me to the moon on a rocket."
+    expected: "Rocket launched successfully."
+    evaluators:
+      - name: exact_match
+    tags:
+      - edge-case

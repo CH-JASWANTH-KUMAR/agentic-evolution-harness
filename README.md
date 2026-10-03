@@ -455,18 +455,16 @@ To evaluate an agent built with LangChain, CrewAI, AutoGen, or an internal frame
 from harness.core.agent import AgentOutput
 from harness.core.trace import ToolCallRecord
 
+
 def my_custom_agent(user_input: str) -> AgentOutput:
     # 1. Call your model or agent framework
     response = call_llm(user_input)
-    
+
     # 2. Return standard AgentOutput
     return AgentOutput(
         output=response.text,
         latency=response.latency_seconds,
-        tool_calls=[
-            ToolCallRecord(tool_name=t.name, args=t.args) 
-            for t in response.tool_calls
-        ],
+        tool_calls=[ToolCallRecord(tool_name=t.name, args=t.args) for t in response.tool_calls],
     )
 ```
 

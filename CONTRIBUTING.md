@@ -4,6 +4,9 @@ Welcome! Whether you are participating in **Hacktoberfest**, adding your first o
 
 This document is your complete roadmap for contributing.
 
+> 💡 **Looking for complete protocol specifications and working examples?**
+> Read the [Contributor Extensibility Guide](docs/contributing/extension-points.md) for detailed interface contracts, registration mechanisms, required tests, and architectural boundaries.
+
 ---
 
 ## 🧭 Where Should I Contribute?

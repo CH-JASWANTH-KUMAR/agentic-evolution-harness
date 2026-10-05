@@ -691,7 +691,7 @@ make format
 
 ## Contributing
 
-We welcome community contributions! Please review our [Contributing Guide](CONTRIBUTING.md) for full instructions.
+We welcome community contributions! Please review our [Contributing Guide](CONTRIBUTING.md) and [Contributor Extensibility Guide](docs/contributing/extension-points.md) for full instructions, protocols, and examples.
 
 ### Where Should I Contribute?
 
@@ -714,7 +714,7 @@ This repository is designed specifically for Hacktoberfest contributors:
 - **Fast Local Feedback**: The entire test suite runs in under 1 second locally without external API keys.
 - **Clear Contracts**: Protocols clearly define method signatures, input types, and return values.
 
-Check out our [Contributing Guide](CONTRIBUTING.md) for beginner, intermediate, and advanced starter ideas.
+Check out our [Contributing Guide](CONTRIBUTING.md) and [Contributor Extensibility Guide](docs/contributing/extension-points.md) for starter ideas, exact protocol specifications, and working examples.
 
 ---
 

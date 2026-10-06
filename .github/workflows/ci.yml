@@ -27,13 +27,27 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: uv sync --all-extras
+        run: uv sync --locked --all-extras --python ${{ matrix.python-version }}
+
+      - name: Confirm Python version
+        run: |
+          uv run python --version
+          uv run python -c "import sys; print(f'Running Python {sys.version}'); assert sys.version.startswith('${{ matrix.python-version }}')"
+
+      - name: Check plugin contracts
+        run: uv run python .github/scripts/plugin_contracts.py
+
+      - name: List registered plugins
+        run: uv run harness list-plugins
 
       - name: Run pytest with coverage
         run: uv run pytest --cov=harness --cov-report=xml
 
-      - name: Validate sample benchmark
-        run: uv run harness validate examples/basic/benchmark.yaml
+      - name: Validate benchmarks
+        run: |
+          uv run harness validate examples/basic/benchmark.yaml
+          uv run harness validate benchmarks/examples/customer_support.yaml
+          uv run harness validate benchmarks/examples/code_generation.yaml
 
       - name: Run sample evaluation
         run: uv run harness evaluate examples/basic/benchmark.yaml

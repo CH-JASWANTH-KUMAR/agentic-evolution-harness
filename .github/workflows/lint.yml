@@ -23,7 +23,7 @@ jobs:
         run: uv python install 3.11
 
       - name: Install dependencies
-        run: uv sync --all-extras
+        run: uv sync --locked --all-extras --python 3.11
 
       - name: Check code formatting
         run: uv run ruff format --check .

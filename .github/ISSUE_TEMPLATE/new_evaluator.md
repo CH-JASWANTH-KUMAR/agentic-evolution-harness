@@ -2,7 +2,7 @@
 name: New Evaluator Proposal
 about: Propose or request a new evaluator plugin
 title: "[EVALUATOR] "
-labels: ["evaluator", "enhancement", "good first issue"]
+labels: []
 assignees: ""
 ---
 

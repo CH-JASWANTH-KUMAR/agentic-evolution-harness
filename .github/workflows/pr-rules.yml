@@ -1,0 +1,41 @@
+# Contribution rules from CONTRIBUTING.md and docs/contributing/extension-points.md,
+# checked automatically so reviewers do not have to. See .github/scripts/pr_rules.py
+# for the full list. Reproduce locally with:
+#     python .github/scripts/pr_rules.py origin/main
+name: PR Rules
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-rules-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  rules:
+    name: Contribution rules
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # needed to diff against the base branch
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Values are passed through env, never pasted into the script, so a pull
+      # request title or body cannot inject shell commands.
+      - name: Check contribution rules
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          AUTHOR_ASSOCIATION: ${{ github.event.pull_request.author_association }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: python .github/scripts/pr_rules.py "$BASE_SHA"

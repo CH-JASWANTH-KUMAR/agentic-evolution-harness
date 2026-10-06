@@ -52,13 +52,15 @@ class GenericAgent:
             self.callable_obj = target
         else:
             # Fallback echo function
-            self.callable_obj = lambda inp: str(inp)
+            def _fallback_echo(inp: object) -> str:
+                return str(inp)
+
+            self.callable_obj = _fallback_echo
 
         # If it's a class, instantiate it
+        self.instance: Any = None
         if isinstance(self.callable_obj, type):
             self.instance = self.callable_obj(**config)
-        else:
-            self.instance = None
 
     def run(
         self,

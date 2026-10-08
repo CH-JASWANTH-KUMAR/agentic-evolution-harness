@@ -6,6 +6,7 @@ from harness.metrics.cost import CostMetric
 from harness.metrics.latency import LatencyMetric
 from harness.metrics.reliability import ReliabilityMetric
 from harness.metrics.success_rate import SuccessRateMetric
+from harness.metrics.token_efficiency import TokenEfficiencyMetric
 
 __all__ = [
     "Metric",
@@ -16,4 +17,5 @@ __all__ = [
     "LatencyMetric",
     "ReliabilityMetric",
     "SuccessRateMetric",
+    "TokenEfficiencyMetric",
 ]
